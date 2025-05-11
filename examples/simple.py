@@ -7,19 +7,39 @@ import asyncio
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
-from browser_use import Agent
+from browser_use import Agent, Browser
 
 load_dotenv()
 
 # Initialize the model
-llm = ChatOpenAI(
-	model='gpt-4o',
+llm = ChatAnthropic(
+	model='claude-3-opus-20240229',
 	temperature=0.0,
 )
-task = 'Go to kayak.com and find the cheapest flight from Zurich to San Francisco on 2025-05-01'
 
-agent = Agent(task=task, llm=llm)
+# llm = ChatOpenAI()
+
+from browser_use import Controller, ActionResult
+# Initialize the controller
+controller = Controller()
+
+@controller.action('Ask user for information')
+def ask_human(question: str) -> str:
+    answer = input(f'\n{question}\nInput: ')
+    return ActionResult(extracted_content=answer)
+
+task ="Login to file:///C:/projects/browser-use/examples/test_login/login.html with username test and password pass, extract the number from the page, and if it's >300, prompt user for input and return True if user input > page number, else False."
+
+browser = Browser()
+agent = Agent(
+	task=task, 
+	llm=llm, 
+  controller=controller,
+  browser=browser,
+	save_conversation_path="logs/conversation",
+	)
 
 
 async def main():

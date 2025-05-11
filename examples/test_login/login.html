@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label>Username:</label><br>
+        <input type="text" id="username"><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" id="password"><br><br>
+
+        <input type="submit" value="Login">
+    </form>
+
+    <p id="error" style="color:red;"></p>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form from submitting normally
+
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === 'test' && pass === 'pass') {
+                window.location.href = 'welcome.html'; // Redirect on success
+            } else {
+                document.getElementById('error').textContent = 'Invalid credentials';
+            }
+        });
+    </script>
+</body>
+</html>
